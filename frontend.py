@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 
 BACKEND_URL = os.getenv("BACKEND_URL")
+st.write("Backend URL:", BACKEND_URL)
 
 # BACKEND_URL = "http://localhost:8000/analyze"
 
