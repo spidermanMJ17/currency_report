@@ -8,7 +8,7 @@ from fetch_data import fetch_data
 load_dotenv()
 
 finance_agent = Agent(
-    model=Groq(id="llama3-70b-8192"),
+    model=Groq(id="openai/gpt-oss-120b"),
     tools=[
         DuckDuckGoTools(
             enable_search=True,
