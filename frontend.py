@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 
 BACKEND_URL = os.getenv("BACKEND_URL")
-st.write("Backend URL:", BACKEND_URL)
+# st.write("Backend URL:", BACKEND_URL)
 
 # BACKEND_URL = "http://localhost:8000/analyze"
 
@@ -63,7 +63,7 @@ if generate:
                 timeout=120,
             )
             st.write("Status Code:", response.status_code)
-            st.write("Response Text:", response.text)
+            # st.write("Response Text:", response.text)
             response.raise_for_status()
             data = response.json()
             st.success(f"✅ Report generated for **{selected_pair} {selected_month} {selected_year}**")
