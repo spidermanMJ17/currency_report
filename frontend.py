@@ -62,6 +62,8 @@ if generate:
                 json={"month": selected_month, "year": selected_year, "currency": selected_pair},
                 timeout=120,
             )
+            st.write("Status Code:", response.status_code)
+            st.write("Response Text:", response.text)
             response.raise_for_status()
             data = response.json()
             st.success(f"✅ Report generated for **{selected_pair} {selected_month} {selected_year}**")
