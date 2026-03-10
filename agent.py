@@ -83,6 +83,8 @@ def run_analysis(month: str, year: int, currency: str) -> str:
 
         News Context:
         {real_data['news']}
+
+        you are not bound to this news data only if there is nothing in the news real data go and check out what effect made on that currency for particular selected month news is very crucial for this report so we must give them real news via fedded data or via searching on a news
         """
     )
     resp = finance_agent.run(query, stream=False)
