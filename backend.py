@@ -15,7 +15,7 @@ class AnalysisRequest(BaseModel):
 class AnalysisResponse(BaseModel):
     result: str
 
-
+@app.post("/analyze/", response_model=AnalysisResponse)
 @app.post("/analyze", response_model=AnalysisResponse)
 def analyze(request: AnalysisRequest):
     result = run_analysis(month=request.month, year=request.year, currency=request.currency)
