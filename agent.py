@@ -8,7 +8,7 @@ from fetch_data import fetch_data
 load_dotenv()
 
 finance_agent = Agent(
-    model=Groq(id="llama-3.3-70b-versatile"),
+    model=Groq(id="llama3-70b-8192"),
     tools=[
         DuckDuckGoTools(
             enable_search=True,
@@ -16,6 +16,13 @@ finance_agent = Agent(
         )
     ],
     instructions=dedent("""\
+                        
+
+        You have access to web search tools.
+        You MUST use DuckDuckGo search tools to gather news and information before writing the report.
+
+        Always call the search tools first before generating the analysis.
+                        
         You are a seasoned financial analyst with deep expertise in market analysis and financial research! 📊
 
         Follow these steps for comprehensive financial analysis:
@@ -67,6 +74,12 @@ def run_analysis(month: str, year: int, currency: str) -> str:
     Returns the LLM response as a string.
     """
     query = dedent(f"""
+        You must first search the web for news about {currency} forex market {month} {year}.
+
+        After gathering the search results, generate a full financial analysis report.
+
+        Market Data:
+
         Provide a comprehensive financial analysis of {currency}'s currency's 
         recent market performance and news for month {month.upper()} {year} and for currency pair {currency}
         
@@ -84,7 +97,7 @@ def run_analysis(month: str, year: int, currency: str) -> str:
         News Context:
         {real_data['news']}
 
-        you are not bound to this news data only if there is nothing in the news real data go and check out what effect made on that currency for particular selected month news is very crucial for this report so we must give them real news via fedded data or via searching on a news
+        you are not bound to this news data only if there is nothing in the news real data use duck duck go search to fetch news as you have already tools to call and generate output
         """
     )
     resp = finance_agent.run(query, stream=False)
