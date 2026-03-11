@@ -15,62 +15,43 @@ finance_agent = Agent(
             enable_news=True,
         )
     ],
-    instructions=dedent("""\
-        You have access to tools for web search.
-        You MUST use DuckDuckGo search tools to gather news and information before writing the report.
-        When using tools follow these rules:
+    instructions = dedent("""
+        You are a professional financial analyst.
 
-        1. To search the web use:
-            web_search(query: str)
+        You have access to these tools:
 
-        2. To get news use:
-            search_news(query: str)
+        1. web_search(query: str)
+           → Search the internet for relevant financial or macroeconomic information.
 
-        Always provide a query string when calling tools.
+        2. search_news(query: str)
+           → Retrieve recent news articles.
 
-        Example:
-        web_search(query="USDINR forex market news February 2026")
+        Rules for tool usage:
+        - Always include a `query` parameter.
+        - Example tool call:
+          web_search(query="USDINR forex market news May 2025")
+        - Never include parameters like id, cursor, link, or url.
 
-        Always gather information using tools before writing the analysis.
-                        
-        You are a seasoned financial analyst with deep expertise in market analysis and financial research! 📊
+        Workflow:
+        1. First gather information using tools.
+        2. Then analyze the provided market data.
+        3. Generate a structured financial report.
 
-        Follow these steps for comprehensive financial analysis:
-        1. Market Overview
-           - Search for latest company news and developments
-           - Current market sentiment and trends
-        2. Financial Deep Dive
-           - Key financial developments and announcements
-           - Recent earnings or business updates
-        3. Professional Analysis
-           - Expert opinions and market commentary
-           - Recent news impact assessment
+        Report format:
+        - Executive Summary
+        - Market Overview
+        - Technical Indicators Analysis
+        - Key Insights
+        - Forward-looking Market Outlook
 
-        4. Financial Context
-           - Industry trends and competitive positioning
-           - Comparative market analysis
-           - Current investor sentiment and market indicators
-
-        Use the provided data exactly when mentioning price levels.
-        Do not invent numbers.
-                        
-        Your reporting style:
-        - Begin with an executive summary
-        - Use tables for data presentation when available
-        - Include clear section headers
-        - Add emoji indicators for trends (📈 📉)
-        - Highlight key insights with bullet points
-        - Compare findings to industry benchmarks when possible
-        - Include technical term explanations
-        - End with a forward-looking market analysis
-
-        Financial Disclosure:
-        - Always highlight news sources and dates
-        - Note data limitations and availability
-        - Mention this is based on publicly available information
-        - This analysis is for educational purposes only
-    """),
+        Important:
+        - Use the provided price data exactly.
+        - Do not invent numerical values.
+        - Mention news sources when available.
+        - This analysis is for educational purposes only.
+        """),
     markdown=True,
+    tool_choice="required",
 )
 
 
@@ -84,31 +65,23 @@ def run_analysis(month: str, year: int, currency: str) -> str:
     Returns the LLM response as a string.
     """
     query = dedent(f"""
-        You must first search the web for news about {currency} forex market {month} {year}.
+        First gather relevant news and macroeconomic information about
+        {currency} forex market for {month} {year} using the web_search or search_news tools.
 
-        After gathering the search results, generate a full financial analysis report.
+        Then generate a professional financial analysis report using the data below.
 
-        Market Data:
-
-        Provide a comprehensive financial analysis of {currency}'s currency's 
-        recent market performance and news for month {month.upper()} {year} and for currency pair {currency}
-        
-        Use the following market data to generate the report.
-
+        Market Data
         Monthly High: {real_data['market_data']['monthly_high']}
         Monthly Low: {real_data['market_data']['monthly_low']}
         Last Price: {real_data['market_data']['last_price']}
 
-        Technical Indicators:
+        Technical Indicators
         EMA50: {real_data['technical_indicators']['ema50']}
         EMA200: {real_data['technical_indicators']['ema200']}
         RSI: {real_data['technical_indicators']['rsi']}
 
-        News Context:
+        News Context
         {real_data['news']}
-
-        you are not bound to this news data only if there is nothing in the news real data use duck duck go search to fetch news as you have already tools to call and generate output
-        """
-    )
+        """)
     resp = finance_agent.run(query, stream=False)
     return resp.content

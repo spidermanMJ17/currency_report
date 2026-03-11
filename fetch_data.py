@@ -103,7 +103,7 @@ def get_news(pair, month, year):
 
     headlines = []
 
-    for article in r.get("articles", [])[:5]:
+    for article in r.get("articles", [])[:3]:
         title = article["title"]
         source = article["source"]["name"]
         date = article["publishedAt"][:10]
