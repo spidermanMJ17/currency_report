@@ -21,7 +21,7 @@ CURRENCIES = [
 ]
 
 current_year = datetime.now().year
-YEARS = list(range(2020, current_year))
+YEARS = list(range(2020, current_year + 2))
 
 st.set_page_config(
     page_title="Financial Analyst",
