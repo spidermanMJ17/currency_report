@@ -29,13 +29,13 @@ current_year = datetime.now().year
 YEARS = list(range(2020, current_year + 2))
 
 st.set_page_config(
-    page_title="USDINR Financial Analyst",
+    page_title="Financial Analyst ",
     page_icon="📊",
     layout="wide",
 )
 
-st.title("📊 USDINR Financial Analysis Report")
-st.markdown("Select a month and year to generate a comprehensive market analysis report.")
+st.title("📊 Financial Analysis Report ")
+st.markdown("Select a month, year and currency to generate a comprehensive market analysis report.")
 
 col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
 
@@ -45,10 +45,10 @@ with col1:
 with col2:
     selected_year = st.selectbox("🗓️ Select Year", YEARS, index=YEARS.index(current_year))
 
-with col4:
+with col3:
     selected_pair = st.selectbox("select currency", CURRENCIES)
 
-with col3:
+with col4:
     st.markdown("<br>", unsafe_allow_html=True)
     generate = st.button("🚀 Generate Report", use_container_width=True)
 

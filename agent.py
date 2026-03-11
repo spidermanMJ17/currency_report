@@ -16,12 +16,22 @@ finance_agent = Agent(
         )
     ],
     instructions=dedent("""\
-                        
-
-        You have access to web search tools.
+        You have access to tools for web search.
         You MUST use DuckDuckGo search tools to gather news and information before writing the report.
+        When using tools follow these rules:
 
-        Always call the search tools first before generating the analysis.
+        1. To search the web use:
+            web_search(query: str)
+
+        2. To get news use:
+            search_news(query: str)
+
+        Always provide a query string when calling tools.
+
+        Example:
+        web_search(query="USDINR forex market news February 2026")
+
+        Always gather information using tools before writing the analysis.
                         
         You are a seasoned financial analyst with deep expertise in market analysis and financial research! 📊
 
