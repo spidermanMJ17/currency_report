@@ -13,13 +13,15 @@ finance_agent = Agent(
         DuckDuckGoTools(
             enable_search=True,
             enable_news=True,
+            fixed_max_results=5
         )
     ],
     instructions = dedent("""
         You are a professional financial analyst.
 
-        You have access to these tools:
-
+        You have access to these tools and you must use it:
+        If you answer without calling a tool first, the response will be rejected.
+        You must call either web_search or search_news before generating the report.
         1. web_search(query: str)
            → Search the internet for relevant financial or macroeconomic information.
 
@@ -51,7 +53,6 @@ finance_agent = Agent(
         - This analysis is for educational purposes only.
         """),
     markdown=True,
-    tool_choice="auto",
 )
 
 
@@ -65,12 +66,14 @@ def run_analysis(month: str, year: int, currency: str) -> str:
     Returns the LLM response as a string.
     """
     query = dedent(f"""
-        First gather relevant news and macroeconomic information about
-        {currency} forex market for {month} {year} using the web_search or search_news tools.
 
-        Then generate a professional financial analysis report using the data below.
+        Find the latest macroeconomic news affecting the {currency} forex market
+        for {month} {year} using the available tools.
 
-        Market Data
+        You must call web_search or search_news to retrieve this information
+        before generating the report.
+
+        Market Data for your additional information
         Monthly High: {real_data['market_data']['monthly_high']}
         Monthly Low: {real_data['market_data']['monthly_low']}
         Last Price: {real_data['market_data']['last_price']}
