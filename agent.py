@@ -51,7 +51,7 @@ finance_agent = Agent(
         - This analysis is for educational purposes only.
         """),
     markdown=True,
-    tool_choice="required",
+    tool_choice="auto",
 )
 
 
