@@ -1,8 +1,10 @@
 import streamlit as st
 import requests
 from datetime import datetime
+import os
 
-BACKEND_URL = "http://localhost:8000/analyze"
+# BACKEND_URL = "http://localhost:8000/analyze"
+BACKEND_URL = os.getenv("BACKEND_URL")
 
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
