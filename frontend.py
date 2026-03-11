@@ -2,12 +2,7 @@ import streamlit as st
 import requests
 from datetime import datetime
 
-import os
-
-BACKEND_URL = os.getenv("BACKEND_URL")
-# st.write("Backend URL:", BACKEND_URL)
-
-# BACKEND_URL = "http://localhost:8000/analyze"
+BACKEND_URL = "http://localhost:8000/analyze"
 
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
@@ -26,15 +21,15 @@ CURRENCIES = [
 ]
 
 current_year = datetime.now().year
-YEARS = list(range(2020, current_year + 2))
+YEARS = list(range(2020, current_year))
 
 st.set_page_config(
-    page_title="USDINR Financial Analyst",
+    page_title="Financial Analyst",
     page_icon="📊",
     layout="wide",
 )
 
-st.title("📊 USDINR Financial Analysis Report")
+st.title("📊 Financial Analysis Report")
 st.markdown("Select a month and year to generate a comprehensive market analysis report.")
 
 col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
@@ -62,8 +57,6 @@ if generate:
                 json={"month": selected_month, "year": selected_year, "currency": selected_pair},
                 timeout=120,
             )
-            st.write("Status Code:", response.status_code)
-            # st.write("Response Text:", response.text)
             response.raise_for_status()
             data = response.json()
             st.success(f"✅ Report generated for **{selected_pair} {selected_month} {selected_year}**")

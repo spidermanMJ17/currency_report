@@ -8,7 +8,7 @@ from fetch_data import fetch_data
 load_dotenv()
 
 finance_agent = Agent(
-    model=Groq(id="openai/gpt-oss-120b"),
+    model=Groq(id="llama-3.3-70b-versatile"),
     tools=[
         DuckDuckGoTools(
             enable_search=True,
@@ -16,15 +16,25 @@ finance_agent = Agent(
         )
     ],
     instructions=dedent("""\
-                        
-
-        You have access to web search tools.
-        You MUST use DuckDuckGo search tools to gather news and information before writing the report.
-
-        Always call the search tools first before generating the analysis.
-                        
         You are a seasoned financial analyst with deep expertise in market analysis and financial research! 📊
 
+        You have access to tools for web search.
+
+        When using tools follow these rules:
+
+        1. To search the web use:
+            web_search(query: str)
+
+        2. To get news use:
+            search_news(query: str)
+
+        Always provide a query string when calling tools.
+
+        Example:
+        web_search(query="USDINR forex market news February 2026")
+
+        Always gather information using tools before writing the analysis.
+                        
         Follow these steps for comprehensive financial analysis:
         1. Market Overview
            - Search for latest company news and developments
@@ -74,12 +84,6 @@ def run_analysis(month: str, year: int, currency: str) -> str:
     Returns the LLM response as a string.
     """
     query = dedent(f"""
-        You must first search the web for news about {currency} forex market {month} {year}.
-
-        After gathering the search results, generate a full financial analysis report.
-
-        Market Data:
-
         Provide a comprehensive financial analysis of {currency}'s currency's 
         recent market performance and news for month {month.upper()} {year} and for currency pair {currency}
         
@@ -96,8 +100,6 @@ def run_analysis(month: str, year: int, currency: str) -> str:
 
         News Context:
         {real_data['news']}
-
-        you are not bound to this news data only if there is nothing in the news real data use duck duck go search to fetch news as you have already tools to call and generate output
         """
     )
     resp = finance_agent.run(query, stream=False)
